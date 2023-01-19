@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "234565571484",
+    "project_id": "socialloginbundle",
+    "storage_bucket": "socialloginbundle.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234565571484:android:00d3ecd5950aaf4353ae59",
+        "android_client_info": {
+          "package_name": "com.Aiitone.SocialLoginCollection"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "234565571484-f95ug3vkrenhrbb1b4vj9llb3s6kl5bk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArPQIQiBih70Apgod2xAGhh_D8CBQH37Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "234565571484-f95ug3vkrenhrbb1b4vj9llb3s6kl5bk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "234565571484-kqknr5kuao6ifeltieqk2sofol5a4qqu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.Aiitone.SocialLoginCollection"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

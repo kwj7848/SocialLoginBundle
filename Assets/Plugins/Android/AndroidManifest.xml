@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.unity3d.player">
+
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.CAMERA" />
+	<uses-permission android:name="android.RECORD_AUDIO" />
+	<uses-permission android:name="READ_EXTERNAL_STORAGE" />
+	<uses-permission android:name="ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+	xmlns:tools="http://schemas.android.com/tools">
+	<application android:name="com.unity3d.player.GlobalApplication">
+		<activity android:name="com.unity3d.player.UnityPlayerActivity"
+                  android:theme="@style/UnityThemeSelector">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+
+			<intent-filter>
+				<!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
+				<data android:host="oauth"
+						android:scheme="kakaob580bfc7916bcb90c8abc91cc9f5a167" />
+			</intent-filter>
+			
+			<meta-data android:name="unityplayer.UnityActivity" android:value="true" />
+		</activity>
+	</application>
+</manifest>

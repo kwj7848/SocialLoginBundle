@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" addBOMForNewFiles="with BOM under Windows, with no BOM otherwise">
+    <file url="file://$PROJECT_DIR$/Assets/02. Scripts/Data/PacketLayout.cs" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/Assets/02. Scripts/Main/Comment/CommentController.cs" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/Assets/02. Scripts/Main/Settings/ButtonWithInfo.cs" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/Assets/02. Scripts/Player/PlayerMovementControl/JoyStick.cs" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/Assets/99. TeamWork/Quest/ChoiSukWoo/#Suk/Dependency/RestApi.cs" charset="x-windows-949" />
+  </component>
+</project>

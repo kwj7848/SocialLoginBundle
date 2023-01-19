@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id,@string/default_web_client_id">
+  <string name="gcm_defaultSenderId" translatable="false">234565571484</string>
+  <string name="google_storage_bucket" translatable="false">socialloginbundle.appspot.com</string>
+  <string name="project_id" translatable="false">socialloginbundle</string>
+  <string name="google_api_key" translatable="false">AIzaSyArPQIQiBih70Apgod2xAGhh_D8CBQH37Y</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyArPQIQiBih70Apgod2xAGhh_D8CBQH37Y</string>
+  <string name="google_app_id" translatable="false">1:234565571484:android:00d3ecd5950aaf4353ae59</string>
+  <string name="default_web_client_id" translatable="false">234565571484-f95ug3vkrenhrbb1b4vj9llb3s6kl5bk.apps.googleusercontent.com</string>
+</resources>
