@@ -19,6 +19,8 @@ public class GoogleLogin : MonoBehaviour
     [HideInInspector]
     public UnityEvent loginSuccessEvent;
 
+    public Action loginSuccess;
+
     private bool _isFinish = false;
     private FirebaseAuth _auth;
     private GoogleSignInConfiguration _configuration;
@@ -33,6 +35,7 @@ public class GoogleLogin : MonoBehaviour
         };
 
         CheckFirebaseDependencies();
+        loginSuccess += () => Debug.Log("LoginSuccess Delegate");
     }
 
     private void CheckFirebaseDependencies()
@@ -106,18 +109,21 @@ public class GoogleLogin : MonoBehaviour
                 }
             }
 
-            loginFailEvent.Invoke();
+            //loginFailEvent.Invoke();
+            loginUserInfo.isSuccess = false;
+            _isFinish = true;
         }
         else if (task.IsCanceled)
         {
             Debug.LogWarning("Canceled");
-            loginFailEvent.Invoke();
+            loginUserInfo.isSuccess = false;
+            _isFinish = true;
+            //loginFailEvent.Invoke();
         }
         else
         {
             Debug.Log("Welcome: " + task.Result.DisplayName + "!");
             SignInWithGoogleOnFirebase(task.Result.IdToken);
-            loginSuccessEvent.Invoke();
         }
     }
 
@@ -131,29 +137,22 @@ public class GoogleLogin : MonoBehaviour
             if (ex != null)
             {
                 Debug.Log("LOGIN FAILED");
-                loginFailEvent.Invoke();
+                loginUserInfo.isSuccess = false;
+                _isFinish = true;
+                //loginFailEvent.Invoke();
                 if (ex.InnerExceptions[0] is FirebaseException inner && (inner.ErrorCode != 0))
                 {
                 }
             }
             else
             {
-                Debug.Log("SIGN IN SUCCESSFUL");
+                loginUserInfo.isSuccess = true;
                 loginUserInfo.userID = task.Result.UserId;
                 loginUserInfo.email = task.Result.Email;
                 
                 _isFinish = true;
             }
         });
-    }
-
-    public void Test()
-    {
-        int i = 10;
-        Debug.Log(i);
-        i++;
-        i++;
-        Debug.Log(i);
     }
 
     public void OnSignInSilently()

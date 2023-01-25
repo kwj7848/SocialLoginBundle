@@ -15,6 +15,7 @@ public enum SocialLogin
 
 public struct LoginUserInfo
 {
+    public bool isSuccess;
     public string userID;
     public string email;
 }
@@ -28,7 +29,7 @@ public class LoginManager : MonoBehaviour
     GoogleLogin _googleLogin;
     AppleLogin _appleLogin;
     
-    void Start()
+    void Start()ㄴ
     {
         _kakaoLogin = GetComponent<KakaoLogin>();
         _googleLogin = GetComponent<GoogleLogin>();
@@ -36,8 +37,7 @@ public class LoginManager : MonoBehaviour
         
         _appleLogin.loginFailEvent.AddListener(OnLoginFail);
         _kakaoLogin.loginFailEvent.AddListener(OnLoginFail);
-        _googleLogin.loginFailEvent.AddListener(OnLoginFail);
-        _googleLogin.loginSuccessEvent.AddListener(OnLoginSuccess);
+        //_googleLogin.loginFailEvent.AddListener(OnLoginFail);
     }
 
     #region LOGIN
@@ -93,6 +93,11 @@ public class LoginManager : MonoBehaviour
             _googleLogin.SignInWithGoogle();
             
             yield return new WaitUntil(() => _googleLogin.IsFinish == true);
+            
+            if (_googleLogin.loginUserInfo.isSuccess)
+                OnLoginSuccess();
+            else
+                OnLoginFail();
         }
     }
 
