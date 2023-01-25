@@ -29,7 +29,7 @@ public class LoginManager : MonoBehaviour
     GoogleLogin _googleLogin;
     AppleLogin _appleLogin;
     
-    void Start()ㄴ
+    void Start()
     {
         _kakaoLogin = GetComponent<KakaoLogin>();
         _googleLogin = GetComponent<GoogleLogin>();
