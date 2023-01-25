@@ -5,17 +5,18 @@ using UnityEngine;
 using UnityEngine.Events;
 using Debug = UnityEngine.Debug;
 
-public class LoginInfo
-{
-    string email, token, name;
-}
-
 public enum SocialLogin
 {
     Developer,
     Kakao,
     Google,
     Apple,
+}
+
+public struct LoginUserInfo
+{
+    public string userID;
+    public string email;
 }
 
 public class LoginManager : MonoBehaviour
@@ -32,11 +33,11 @@ public class LoginManager : MonoBehaviour
         _kakaoLogin = GetComponent<KakaoLogin>();
         _googleLogin = GetComponent<GoogleLogin>();
         _appleLogin = GetComponent<AppleLogin>();
-
-
+        
         _appleLogin.loginFailEvent.AddListener(OnLoginFail);
         _kakaoLogin.loginFailEvent.AddListener(OnLoginFail);
         _googleLogin.loginFailEvent.AddListener(OnLoginFail);
+        _googleLogin.loginSuccessEvent.AddListener(OnLoginSuccess);
     }
 
     #region LOGIN
@@ -91,7 +92,7 @@ public class LoginManager : MonoBehaviour
         {
             _googleLogin.SignInWithGoogle();
             
-            yield return new WaitUntil(() => _googleLogin.isFinish == true);
+            yield return new WaitUntil(() => _googleLogin.IsFinish == true);
         }
     }
 
@@ -99,6 +100,12 @@ public class LoginManager : MonoBehaviour
     {
         StopAllCoroutines();
         onLoginFail.Invoke();
+    }
+
+    private void OnLoginSuccess()
+    {
+        StopAllCoroutines();
+        onLoginSuccess.Invoke();
     }
 
     #endregion
@@ -126,3 +133,6 @@ public class LoginManager : MonoBehaviour
 
     #endregion
 }
+
+
+

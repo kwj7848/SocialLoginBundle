@@ -18,24 +18,18 @@ public class AppleLogin : MonoBehaviour
 {
     public bool IsFinish
     {
-        get => isFinish;
+        get => _isFinish;
     }
-    
+
     [HideInInspector]
     public UnityEvent loginFailEvent;
 
-    public UserInfo userInfo = new UserInfo();
+    public LoginUserInfo loginUserInfo = new LoginUserInfo();
 
-    public struct UserInfo
-    {
-        public string userID;
-        public string email;
-    }
-    
     private const string AppleUserIdKey = "AppleUserId";
     private IAppleAuthManager _appleAuthManager;
-    private bool isFinish = false;
-    
+    private bool _isFinish = false;
+
     private void Awake()
     {
 #if UNITY_IOS
@@ -97,9 +91,6 @@ public class AppleLogin : MonoBehaviour
     }
 
 
-
-
-
     private void CheckCredentialStatusForUserId(string appleUserId)
     {
         // If there is an apple ID available, we should check the credential state
@@ -111,14 +102,11 @@ public class AppleLogin : MonoBehaviour
                 {
                     // If it's authorized, login with that user id
                     case CredentialState.Authorized:
-
                         return;
-
                     // If it was revoked, or not found, we need a new sign in with apple attempt
                     // Discard previous apple user id
                     case CredentialState.Revoked:
                     case CredentialState.NotFound:
-
                         PlayerPrefs.DeleteKey(AppleUserIdKey);
                         return;
                 }
@@ -126,8 +114,8 @@ public class AppleLogin : MonoBehaviour
             error =>
             {
                 var authorizationErrorCode = error.GetAuthorizationErrorCode();
-                Debug.LogWarning("Error while trying to get credential state " + authorizationErrorCode.ToString() + " " + error.ToString());
-
+                Debug.LogWarning("Error while trying to get credential state " + authorizationErrorCode.ToString() +
+                                 " " + error.ToString());
             });
     }
 
@@ -142,12 +130,9 @@ public class AppleLogin : MonoBehaviour
             {
                 // If it's an Apple credential, save the user ID, for later logins
                 var appleIdCredential = credential as IAppleIDCredential;
+
                 if (appleIdCredential != null)
-                {
                     PlayerPrefs.SetString(AppleUserIdKey, credential.User);
-                }
-
-
             },
             error =>
             {
@@ -170,15 +155,16 @@ public class AppleLogin : MonoBehaviour
                 if (appleIdCredential != null)
                 {
                     // If a sign in with apple succeeds, we should have obtained the credential with the user id, name, and email, save it
-                    userInfo.userID = appleIdCredential.User;
-                    userInfo.email = appleIdCredential.Email;
-                    isFinish = true;
+                    loginUserInfo.userID = appleIdCredential.User;
+                    loginUserInfo.email = appleIdCredential.Email;
+                    _isFinish = true;
                 }
             },
             error =>
             {
                 var authorizationErrorCode = error.GetAuthorizationErrorCode();
-                Debug.LogWarning("Sign in with Apple failed " + authorizationErrorCode.ToString() + " " + error.ToString());
+                Debug.LogWarning("Sign in with Apple failed " + authorizationErrorCode.ToString() + " " +
+                                 error.ToString());
                 loginFailEvent.Invoke();
                 //this.SetupLoginMenuForSignInWithApple();
             });
@@ -203,14 +189,12 @@ public class AppleLogin : MonoBehaviour
                 var appleIdCredential = credential as IAppleIDCredential;
                 if (appleIdCredential != null)
                 {
-                    Debug.Log("credential is alright!!");
-                    string userID = appleIdCredential.User;
-                    userInfo.userID = appleIdCredential.User;
-                    userInfo.email = appleIdCredential.Email;
+                    loginUserInfo.userID = appleIdCredential.User;
+                    loginUserInfo.email = appleIdCredential.Email;
 
                     Debug.Log("AppleUserID =" + appleIdCredential.User);
 
-                    //isFinish = true;
+                    //_isFinish = true;
                     this.PerformFirebaseAuthentication(appleIdCredential, rawNonce, firebaseAuthCallback);
                 }
             },
@@ -236,7 +220,6 @@ public class AppleLogin : MonoBehaviour
                 var appleIdCredential = credential as IAppleIDCredential;
                 if (appleIdCredential != null)
                 {
-
                     this.PerformFirebaseAuthentication(appleIdCredential, rawNonce, firebaseAuthCallback);
                 }
             },
@@ -272,9 +255,7 @@ public class AppleLogin : MonoBehaviour
             for (var randomNumberIndex = 0; randomNumberIndex < randomNumbers.Count; randomNumberIndex++)
             {
                 if (remainingLength == 0)
-                {
                     break;
-                }
 
                 var randomNumber = randomNumbers[randomNumberIndex];
                 if (randomNumber < charset.Length)
@@ -338,7 +319,8 @@ public class AppleLogin : MonoBehaviour
             rawNonce,
             authorizationCode);
 
-        this.firebaseAuth.SignInWithCredentialAsync(firebaseCredential).ContinueWithOnMainThread(task => HandleSignInWithUser(task, firebaseAuthCallback));
+        this.firebaseAuth.SignInWithCredentialAsync(firebaseCredential)
+            .ContinueWithOnMainThread(task => HandleSignInWithUser(task, firebaseAuthCallback));
     }
 
     private static void HandleSignInWithUser(Task<FirebaseUser> task, Action<FirebaseUser> firebaseUserCallback)

@@ -1,45 +1,36 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Firebase;
 using Firebase.Auth;
 using Google;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Events;
-
 
 public class GoogleLogin : MonoBehaviour
 {
-    [HideInInspector]
-    public bool isFinish = false;
-
-    public bool IsFinish
-    {
-        get => isFinish;
-    }
+    public string webClientId = "<your client id here>";
+    public bool IsFinish => _isFinish;
+    public LoginUserInfo loginUserInfo = new LoginUserInfo();
 
     [HideInInspector]
     public UnityEvent loginFailEvent;
 
-    public UserInfo userInfo = new UserInfo();
+    [HideInInspector]
+    public UnityEvent loginSuccessEvent;
 
-    public struct UserInfo
-    {
-        public string userID;
-        public string email;
-    }
-
-
-    public string webClientId = "<your client id here>";
-
-    private FirebaseAuth auth;
-    private GoogleSignInConfiguration configuration;
+    private bool _isFinish = false;
+    private FirebaseAuth _auth;
+    private GoogleSignInConfiguration _configuration;
 
     private void Awake()
     {
-        configuration = new GoogleSignInConfiguration { WebClientId = webClientId, RequestEmail = true, RequestIdToken = true };
+        _configuration = new GoogleSignInConfiguration
+        {
+            WebClientId = webClientId,
+            RequestEmail = true,
+            RequestIdToken = true
+        };
 
         CheckFirebaseDependencies();
     }
@@ -51,32 +42,36 @@ public class GoogleLogin : MonoBehaviour
             if (task.IsCompleted)
             {
                 if (task.Result == DependencyStatus.Available)
-                    auth = FirebaseAuth.DefaultInstance;
+                    _auth = FirebaseAuth.DefaultInstance;
                 else
-                    Debug.LogWarning("Could not resolve all Firebase dependencies: " + task.Result.ToString());
+                    Debug.LogWarning("Could not resolve all Firebase dependencies: " + task.Result);
             }
             else
             {
-                Debug.LogWarning("Dependency check was not completed. Error : " + task.Exception.Message);
+                Debug.LogWarning("Dependency check was not completed. Error : " + task.Exception?.Message);
             }
         });
     }
 
-    public void SignInWithGoogle() { OnSignIn(); }
-    public void SignOutFromGoogle() { OnSignOut(); }
+    public void SignInWithGoogle()
+    {
+        OnSignIn();
+    }
+
+    public void SignOutFromGoogle()
+    {
+        OnSignOut();
+    }
 
     private void OnSignIn()
     {
         if (GoogleSignIn.Configuration == null)
         {
-            GoogleSignIn.Configuration = configuration;
+            GoogleSignIn.Configuration = _configuration;
             GoogleSignIn.Configuration.UseGameSignIn = false;
             GoogleSignIn.Configuration.RequestIdToken = true;
         }
-        else
-        {
 
-        }
         Debug.Log("Calling SignIn");
 
         GoogleSignIn.DefaultInstance.SignIn().ContinueWith(OnAuthenticationFinished);
@@ -98,7 +93,7 @@ public class GoogleLogin : MonoBehaviour
     {
         if (task.IsFaulted)
         {
-            using (IEnumerator<Exception> enumerator = task.Exception.InnerExceptions.GetEnumerator())
+            using (IEnumerator<Exception> enumerator = task.Exception?.InnerExceptions.GetEnumerator())
             {
                 if (enumerator.MoveNext())
                 {
@@ -110,8 +105,8 @@ public class GoogleLogin : MonoBehaviour
                     Debug.LogWarning("Got Unexpected Exception?!?" + task.Exception);
                 }
             }
-            loginFailEvent.Invoke();
 
+            loginFailEvent.Invoke();
         }
         else if (task.IsCanceled)
         {
@@ -121,44 +116,49 @@ public class GoogleLogin : MonoBehaviour
         else
         {
             Debug.Log("Welcome: " + task.Result.DisplayName + "!");
-
             SignInWithGoogleOnFirebase(task.Result.IdToken);
+            loginSuccessEvent.Invoke();
         }
     }
 
     private void SignInWithGoogleOnFirebase(string idToken)
     {
         Credential credential = GoogleAuthProvider.GetCredential(idToken, null);
-        auth.SignInWithCredentialAsync(credential).ContinueWith(task =>
+        _auth.SignInWithCredentialAsync(credential).ContinueWith(task =>
         {
             AggregateException ex = task.Exception;
+
             if (ex != null)
             {
                 Debug.Log("LOGIN FAILED");
                 loginFailEvent.Invoke();
                 if (ex.InnerExceptions[0] is FirebaseException inner && (inner.ErrorCode != 0))
                 {
-
                 }
             }
             else
             {
                 Debug.Log("SIGN IN SUCCESSFUL");
-                userInfo.userID = task.Result.UserId;
-                userInfo.email = task.Result.Email;
-
-                Debug.Log("USER_ID : " + userInfo.userID);
-                Debug.Log("USER_EMAIL : " + userInfo.email);
-
-                isFinish = true;
+                loginUserInfo.userID = task.Result.UserId;
+                loginUserInfo.email = task.Result.Email;
+                
+                _isFinish = true;
             }
         });
+    }
 
+    public void Test()
+    {
+        int i = 10;
+        Debug.Log(i);
+        i++;
+        i++;
+        Debug.Log(i);
     }
 
     public void OnSignInSilently()
     {
-        GoogleSignIn.Configuration = configuration;
+        GoogleSignIn.Configuration = _configuration;
         GoogleSignIn.Configuration.UseGameSignIn = false;
         GoogleSignIn.Configuration.RequestIdToken = true;
         GoogleSignIn.DefaultInstance.SignInSilently().ContinueWith(OnAuthenticationFinished);
@@ -166,7 +166,7 @@ public class GoogleLogin : MonoBehaviour
 
     public void OnGamesSignIn()
     {
-        GoogleSignIn.Configuration = configuration;
+        GoogleSignIn.Configuration = _configuration;
         GoogleSignIn.Configuration.UseGameSignIn = true;
         GoogleSignIn.Configuration.RequestIdToken = false;
         GoogleSignIn.DefaultInstance.SignIn().ContinueWith(OnAuthenticationFinished);

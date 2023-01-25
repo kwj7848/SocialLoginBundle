@@ -13,7 +13,7 @@ public class KakaoLogin : MonoBehaviour
         public string email;
     }
 
-    public UserInfo userInfo = new UserInfo();
+    public LoginUserInfo loginUserInfo = new LoginUserInfo();
 
     public bool IsFinish => _isFinish;
 
@@ -66,9 +66,10 @@ public class KakaoLogin : MonoBehaviour
 
     void SaveKakaoUserID(string userID)
     {
-        userInfo.userID = userID;
+        loginUserInfo.userID = userID;
         Debug.Log("SAVE:" + userID);
         saveInfoCount++;
+        
         if (saveInfoCount >= 2)
         {
             _isFinish = true;
@@ -78,9 +79,10 @@ public class KakaoLogin : MonoBehaviour
 
     void SaveKakaoUserEmail(string email)
     {
-        userInfo.email = email;
+        loginUserInfo.email = email;
         Debug.Log("SAVE:" + email);
         saveInfoCount++;
+        
         if (saveInfoCount >= 2)
         {
             _isFinish = true;
