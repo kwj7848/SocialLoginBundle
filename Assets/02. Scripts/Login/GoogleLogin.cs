@@ -27,6 +27,7 @@ public class GoogleLogin : MonoBehaviour
 
     private void Awake()
     {
+#if UNITY_ANDROID
         _configuration = new GoogleSignInConfiguration
         {
             WebClientId = webClientId,
@@ -36,6 +37,7 @@ public class GoogleLogin : MonoBehaviour
 
         CheckFirebaseDependencies();
         loginSuccess += () => Debug.Log("LoginSuccess Delegate");
+#endif
     }
 
     private void CheckFirebaseDependencies()
@@ -58,6 +60,8 @@ public class GoogleLogin : MonoBehaviour
 
     public void SignInWithGoogle()
     {
+        loginUserInfo = new LoginUserInfo();
+        _isFinish = false;
         OnSignIn();
     }
 

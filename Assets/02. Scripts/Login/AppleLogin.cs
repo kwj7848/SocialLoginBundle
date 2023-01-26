@@ -12,17 +12,10 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using Firebase.Extensions;
 using System.Threading.Tasks;
-using UnityEngine.Events;
 
 public class AppleLogin : MonoBehaviour
 {
-    public bool IsFinish
-    {
-        get => _isFinish;
-    }
-
-    [HideInInspector]
-    public UnityEvent loginFailEvent;
+    public bool IsFinish => _isFinish;
 
     public LoginUserInfo loginUserInfo = new LoginUserInfo();
 
@@ -63,8 +56,11 @@ public class AppleLogin : MonoBehaviour
 #endif
     }
 
-    public void OnClick_SignInWithApple()
+    public void StartLogin()
     {
+        loginUserInfo = new LoginUserInfo();
+        _isFinish = false;
+
         this.SignInWithApple();
     }
 
@@ -157,6 +153,8 @@ public class AppleLogin : MonoBehaviour
                     // If a sign in with apple succeeds, we should have obtained the credential with the user id, name, and email, save it
                     loginUserInfo.userID = appleIdCredential.User;
                     loginUserInfo.email = appleIdCredential.Email;
+                    loginUserInfo.isSuccess = true;
+
                     _isFinish = true;
                 }
             },
@@ -165,7 +163,9 @@ public class AppleLogin : MonoBehaviour
                 var authorizationErrorCode = error.GetAuthorizationErrorCode();
                 Debug.LogWarning("Sign in with Apple failed " + authorizationErrorCode.ToString() + " " +
                                  error.ToString());
-                loginFailEvent.Invoke();
+
+                loginUserInfo.isSuccess = false;
+                _isFinish = true;
                 //this.SetupLoginMenuForSignInWithApple();
             });
     }

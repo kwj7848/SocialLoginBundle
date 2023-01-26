@@ -4,40 +4,31 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+using Firebase.Auth;
 
 public class KakaoLogin : MonoBehaviour
 {
-    public class UserInfo
-    {
-        public string userID;
-        public string email;
-    }
-
     public LoginUserInfo loginUserInfo = new LoginUserInfo();
-
     public bool IsFinish => _isFinish;
 
-    public int saveInfoCount = 0;
-
-    [HideInInspector]
-    public UnityEvent loginSuccessEvent, loginFailEvent, logoutSuccessEvent;
-
-
-    private AndroidJavaObject _ajo;
+    private int saveInfoCount = 0;
     private bool _isFinish = false;
-
-    private string id;
-    private string token;
+    private AndroidJavaObject _ajo;
 
     void Start()
     {
 #if UNITY_ANDROID
         _ajo = new AndroidJavaObject("com.unity3d.player.UnityKakaoLogin");
+
+#elif UNITY_IOS
+
 #endif
     }
 
     public void login()
     {
+        loginUserInfo = new LoginUserInfo();
+        _isFinish = false;
 #if UNITY_ANDROID
         _ajo.Call("KakaoLogin");
 
@@ -61,31 +52,35 @@ public class KakaoLogin : MonoBehaviour
     void FailKakaoLogin(string error)
     {
         Debug.LogError("KakaoLoginError : " + error);
-        loginFailEvent.Invoke();
+        _isFinish = true;
+        loginUserInfo.isSuccess = false;
     }
 
-    void SaveKakaoUserID(string userID)
+    public void SaveKakaoUserID(string userID)
     {
         loginUserInfo.userID = userID;
-        Debug.Log("SAVE:" + userID);
+
+        Debug.Log($"ID : {userID}!!");
         saveInfoCount++;
-        
+
         if (saveInfoCount >= 2)
         {
             _isFinish = true;
+            loginUserInfo.isSuccess = true;
             saveInfoCount = 0;
         }
     }
 
-    void SaveKakaoUserEmail(string email)
+    public void SaveKakaoUserEmail(string email)
     {
         loginUserInfo.email = email;
-        Debug.Log("SAVE:" + email);
+        Debug.Log($"ID : {email}!!");
         saveInfoCount++;
-        
+
         if (saveInfoCount >= 2)
         {
             _isFinish = true;
+            loginUserInfo.isSuccess = true;
             saveInfoCount = 0;
         }
     }

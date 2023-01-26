@@ -23,10 +23,14 @@ extern "C" {
             [KOSessionTask userMeTaskWithCompletion:^(NSError * _Nullable errosr, KOUserMe * _Nullable me) {
                 if (error){
                     NSLog(@"get user info failed. - error: %@", error);
+                    NSLog(@"get user info failed. - error: %s", [me.ID UTF8String]);
+                    NSLog(@"get user info failed. - error: %s", [me.email UTF8String]);
                     UnitySendMessage("LoginManager", "SaveKakaoUserID", [me.ID UTF8String]);
                     UnitySendMessage("LoginManager", "SaveKakaoUserEmail", [me.account.email UTF8String]);
                 } else {
                     NSLog(@"get user info. - user info: %@", me);
+                    NSLog(@"get user info failed. - error: %s", [me.ID UTF8String]);
+                    NSLog(@"get user info failed. - error: %s", [me.email UTF8String]);
                     UnitySendMessage("LoginManager", "SaveKakaoUserID", [me.ID UTF8String]);
                     UnitySendMessage("LoginManager", "SaveKakaoUserEmail", [me.account.email UTF8String]);
                 }

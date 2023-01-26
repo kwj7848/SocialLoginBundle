@@ -1,6 +1,5 @@
 using System.Collections;
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using Debug = UnityEngine.Debug;
@@ -13,7 +12,7 @@ public enum SocialLogin
     Apple,
 }
 
-public struct LoginUserInfo
+public class LoginUserInfo
 {
     public bool isSuccess;
     public string userID;
@@ -22,6 +21,8 @@ public struct LoginUserInfo
 
 public class LoginManager : MonoBehaviour
 {
+    public LoginUserInfo loginUserInfo;
+
     public UnityEvent onLoginFail;
     public UnityEvent onLoginSuccess;
 
@@ -34,10 +35,6 @@ public class LoginManager : MonoBehaviour
         _kakaoLogin = GetComponent<KakaoLogin>();
         _googleLogin = GetComponent<GoogleLogin>();
         _appleLogin = GetComponent<AppleLogin>();
-        
-        _appleLogin.loginFailEvent.AddListener(OnLoginFail);
-        _kakaoLogin.loginFailEvent.AddListener(OnLoginFail);
-        //_googleLogin.loginFailEvent.AddListener(OnLoginFail);
     }
 
     #region LOGIN
@@ -49,18 +46,18 @@ public class LoginManager : MonoBehaviour
             case SocialLogin.Developer:
                 break;
             case SocialLogin.Apple:
-                LoginApple(onFinish);
+                LoginApple();
                 break;
             case SocialLogin.Google:
-                LoginGoogle(onFinish);
+                LoginGoogle();
                 break;
             case SocialLogin.Kakao:
-                LoginKakao(onFinish);
+                LoginKakao();
                 break;
         }
     }
 
-    public void LoginKakao(UnityEvent onFinish)
+    public void LoginKakao()
     {
         StartCoroutine(Login());
 
@@ -69,22 +66,34 @@ public class LoginManager : MonoBehaviour
             _kakaoLogin.login();
 
             yield return new WaitUntil(() => _kakaoLogin.IsFinish == true);
+            loginUserInfo = _kakaoLogin.loginUserInfo;
+
+            if (loginUserInfo.isSuccess)
+                OnLoginSuccess();
+            else
+                OnLoginFail();
         }
     }
 
-    public void LoginApple(UnityEvent onFinish)
+    public void LoginApple()
     {
         StartCoroutine(Login());
 
         IEnumerator Login()
         {
-            _appleLogin.OnClick_SignInWithApple();
+            _appleLogin.StartLogin();
             
             yield return new WaitUntil(() => _appleLogin.IsFinish == true);
+            loginUserInfo = _appleLogin.loginUserInfo;
+
+            if (loginUserInfo.isSuccess)
+                OnLoginSuccess();
+            else
+                OnLoginFail();
         }
     }
 
-    public void LoginGoogle(UnityEvent onFinish)
+    public void LoginGoogle()
     {
         StartCoroutine(Login());
 
@@ -93,8 +102,9 @@ public class LoginManager : MonoBehaviour
             _googleLogin.SignInWithGoogle();
             
             yield return new WaitUntil(() => _googleLogin.IsFinish == true);
-            
-            if (_googleLogin.loginUserInfo.isSuccess)
+            loginUserInfo = _googleLogin.loginUserInfo;
+
+            if (loginUserInfo.isSuccess)
                 OnLoginSuccess();
             else
                 OnLoginFail();
