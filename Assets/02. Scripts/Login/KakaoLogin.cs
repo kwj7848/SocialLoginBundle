@@ -1,10 +1,4 @@
-using System;
-using System.Collections;
-using System.Text;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.Networking;
-using Firebase.Auth;
 
 public class KakaoLogin : MonoBehaviour
 {
@@ -65,8 +59,8 @@ public class KakaoLogin : MonoBehaviour
 
         if (saveInfoCount >= 2)
         {
-            _isFinish = true;
             loginUserInfo.isSuccess = true;
+            _isFinish = true;
             saveInfoCount = 0;
         }
     }
@@ -79,8 +73,8 @@ public class KakaoLogin : MonoBehaviour
 
         if (saveInfoCount >= 2)
         {
-            _isFinish = true;
             loginUserInfo.isSuccess = true;
+            _isFinish = true;
             saveInfoCount = 0;
         }
     }
