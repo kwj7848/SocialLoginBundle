@@ -13,14 +13,6 @@ public class GoogleLogin : MonoBehaviour
     public bool IsFinish => _isFinish;
     public LoginUserInfo loginUserInfo = new LoginUserInfo();
 
-    [HideInInspector]
-    public UnityEvent loginFailEvent;
-
-    [HideInInspector]
-    public UnityEvent loginSuccessEvent;
-
-    public Action loginSuccess;
-
     private bool _isFinish = false;
     private FirebaseAuth _auth;
     private GoogleSignInConfiguration _configuration;
@@ -36,7 +28,6 @@ public class GoogleLogin : MonoBehaviour
         };
 
         CheckFirebaseDependencies();
-        loginSuccess += () => Debug.Log("LoginSuccess Delegate");
 #endif
     }
 

@@ -31,18 +31,18 @@ public class CustomizeLoginPlatform : MonoBehaviour
     public void OnClick_Kakao()
     {
         onBeforeLoginEvent.Invoke();
-        _loginManager.LoginByPlatform(SocialLogin.Kakao, onLoginSuccess);
+        _loginManager.LoginByPlatform(SocialLogin.Kakao);
     }
 
     public void OnClick_Google()
     {
         onBeforeLoginEvent.Invoke();
-        _loginManager.LoginByPlatform(SocialLogin.Google, onLoginSuccess);
+        _loginManager.LoginByPlatform(SocialLogin.Google);
     }
 
     public void OnClick_Apple()
     {
         onBeforeLoginEvent.Invoke();
-        _loginManager.LoginByPlatform(SocialLogin.Apple, onLoginSuccess);
+        _loginManager.LoginByPlatform(SocialLogin.Apple);
     }
 }

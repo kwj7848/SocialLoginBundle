@@ -39,7 +39,7 @@ public class LoginManager : MonoBehaviour
 
     #region LOGIN
 
-    public void LoginByPlatform(SocialLogin platform, UnityEvent onFinish)
+    public void LoginByPlatform(SocialLogin platform)
     {
         switch (platform)
         {

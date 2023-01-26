@@ -23,7 +23,7 @@
 			<intent-filter>
 				<!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
 				<data android:host="oauth"
-						android:scheme="kakaob580bfc7916bcb90c8abc91cc9f5a167" />
+						android:scheme="kakaobc17e414c7708d541bf6f23e0ebe03b9" />
 			</intent-filter>
 			
 			<meta-data android:name="unityplayer.UnityActivity" android:value="true" />

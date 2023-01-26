@@ -1037,12 +1037,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   webClientId: 234565571484-f3iljfnrhv5og3fmv0qrpfh89prg4iue.apps.googleusercontent.com
-  loginFailEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  loginSuccessEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &507129635
 MonoBehaviour:
   m_ObjectHideFlags: 0
