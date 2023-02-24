@@ -30,7 +30,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-unity:9.5.0' // Assets/Firebase/Editor/AuthDependencies.xml:20
     implementation 'com.google.firebase:firebase-common:20.1.2' // Assets/Firebase/Editor/AppDependencies.xml:13
     implementation 'com.google.signin:google-signin-support:1.0.4' // Assets/GoogleSignIn/Editor/GoogleSignInSupportDependencies.xml:9
-    implementation "com.kakao.sdk:v2-user:2.11.2" 
 // Android Resolver Dependencies End
 **DEPS**}
 
